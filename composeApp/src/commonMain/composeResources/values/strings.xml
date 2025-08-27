@@ -1,0 +1,5 @@
+<resources>
+    <string name="home">Home</string>
+    <string name="detail">Details</string> <!-- Or a more appropriate name like "Details" or "Medication Details" -->
+    <string name="add_medication">Add Medication</string> <!-- Or a more appropriate name like "Add Medication" -->
+</resources>
