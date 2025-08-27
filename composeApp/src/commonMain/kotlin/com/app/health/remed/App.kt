@@ -37,7 +37,10 @@ fun AppNavHost() {
 
         composable<AddMed> {
             AddMedScreen(
-                onBack = { navController.popBackStack() }
+                onBack = {
+                    // Handle back navigation
+                    navController.popBackStack()
+                }
             )
         }
     }
