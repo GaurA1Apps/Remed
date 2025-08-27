@@ -83,6 +83,7 @@ fun EmptyHomeScreen(
 @Composable
 fun PrimaryButton(
     text: String,
+    color: Color = Color(0xFFFFC107),
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
@@ -93,7 +94,7 @@ fun PrimaryButton(
             .height(50.dp),
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFFFC107), // Yellow background
+            containerColor = color, // Yellow background
             contentColor = Color.White
         )
     ) {
