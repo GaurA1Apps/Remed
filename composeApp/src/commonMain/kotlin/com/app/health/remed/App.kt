@@ -9,6 +9,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.app.health.remed.di.createKoinConfiguration
 import com.app.health.remed.navigation.AddMed
 import com.app.health.remed.navigation.Detail
 import com.app.health.remed.navigation.Home
@@ -18,68 +19,60 @@ import com.app.health.remed.prefs.rememberDatastoreRepository
 import com.app.health.remed.ui.screens.add_medicine.AddMedScreen
 import com.app.health.remed.ui.screens.home.HomeScreen
 import com.app.health.remed.ui.screens.onboarding.OnBoardingScreen
+import com.app.health.remed.ui.screens.onboarding.OnBoardingViewModel
 import com.app.health.remed.ui.theme.AppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.KoinContext
+import org.koin.compose.KoinMultiplatformApplication
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
 
+@OptIn(KoinExperimentalAPI::class)
 @Composable
 @Preview
-fun App(
-    dataStore: DataStore<Preferences>
-) {
-    AppTheme {
-        AppNavHost(dataStore)
+fun App() {
+    KoinMultiplatformApplication(
+        config = createKoinConfiguration()
+    ) {
+        AppTheme {
+            AppNavHost()
+        }
     }
 }
 
 @Composable
-fun AppNavHost(
-    dataStore: DataStore<Preferences>
-) {
+fun AppNavHost() {
     val navController = rememberNavController()
-    val scope = rememberCoroutineScope()
-    val datastoreRepository = rememberDatastoreRepository(dataStore)
-    val isOnBoardingDone by datastoreRepository.isOnBoardingDone()
-        .collectAsStateWithLifecycle(false)
 
-    if (!isOnBoardingDone) {
-        OnBoardingScreen {
-            scope.launch {
-                datastoreRepository.saveOnBoarding(value = true)
+    NavHost(
+        navController = navController,
+        startDestination = Home
+    ) {
+        // Navigation destinations
+        composable<OnBoarding> {
+            val onBoardingViewModel = koinViewModel<OnBoardingViewModel>()
+            OnBoardingScreen {
+                onBoardingViewModel.onGetStartedClick()
+                navController.navigate(Home)
             }
         }
-    } else {
-        NavHost(
-            navController = navController,
-            startDestination = Home
-        ) {
-            // Navigation destinations
 
-            composable<OnBoarding> {
-                OnBoardingScreen {
-                    scope.launch {
-                        datastoreRepository.saveOnBoarding(value = true)
-                        navController.navigate(Home)
-                    }
+        composable<Home> {
+            HomeScreen(
+                onDetail = { navController.navigate(Detail) },
+                onAddMed = { navController.navigate(OnBoarding) }
+            )
+        }
+
+        composable<AddMed> {
+            AddMedScreen(
+                onBack = {
+                    // Handle back navigation
+                    navController.popBackStack()
                 }
-            }
-
-            composable<Home> {
-                HomeScreen(
-                    onDetail = { navController.navigate(Detail) },
-                    onAddMed = { navController.navigate(AddMed) }
-                )
-            }
-
-            composable<AddMed> {
-                AddMedScreen(
-                    onBack = {
-                        // Handle back navigation
-                        navController.popBackStack()
-                    }
-                )
-            }
+            )
         }
     }
 }

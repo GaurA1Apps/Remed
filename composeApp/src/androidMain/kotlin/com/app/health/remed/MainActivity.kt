@@ -17,9 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         setContent {
-            App(
-                remember { createDataStore(applicationContext) }
-            )
+            App()
         }
     }
 }

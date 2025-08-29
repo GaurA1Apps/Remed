@@ -52,6 +52,12 @@ kotlin {
             api("androidx.datastore:datastore-preferences:1.1.7")
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.0-beta05")
 
+            //Koin
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
