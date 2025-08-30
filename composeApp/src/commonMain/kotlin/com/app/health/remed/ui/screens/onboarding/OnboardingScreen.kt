@@ -27,6 +27,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import remed.composeapp.generated.resources.Res
 import remed.composeapp.generated.resources.ic_app_icon
+import remed.composeapp.generated.resources.ic_launcher_general
 
 @Composable
 fun OnBoardingScreen(
@@ -41,7 +42,7 @@ fun OnBoardingScreen(
     ) {
         // Logo / Illustration
         Image(
-            painter = painterResource(Res.drawable.ic_app_icon), // replace with your asset
+            painter = painterResource(Res.drawable.ic_launcher_general), // replace with your asset
             contentDescription = "MediMinder Logo",
             modifier = Modifier
                 .size(200.dp)
