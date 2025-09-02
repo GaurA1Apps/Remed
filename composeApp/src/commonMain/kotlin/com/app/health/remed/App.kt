@@ -1,6 +1,7 @@
 package com.app.health.remed
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +25,8 @@ import com.app.health.remed.navigation.OnBoarding
 import com.app.health.remed.prefs.DatastoreRepository
 import com.app.health.remed.prefs.rememberDatastoreRepository
 import com.app.health.remed.ui.screens.add_medicine.AddMedScreen
+import com.app.health.remed.ui.screens.add_medicine.AddMedicineViewModel
+import com.app.health.remed.ui.screens.add_medicine.components.AddMedicineState
 import com.app.health.remed.ui.screens.home.HomeScreen
 import com.app.health.remed.ui.screens.onboarding.OnBoardingScreen
 import com.app.health.remed.ui.screens.onboarding.OnBoardingViewModel
@@ -45,9 +48,7 @@ fun App() {
         config = createKoinConfiguration()
     ) {
         AppTheme {
-            Scaffold(
-                topBar = { AppTopBar() }
-            ) { innerPadding ->
+            Scaffold { innerPadding ->
                 AppNavHost(innerPadding)
             }
         }
@@ -61,7 +62,9 @@ fun AppNavHost(
     val navController = rememberNavController()
 
     NavHost(
-        modifier = Modifier.padding(innerPadding),
+        modifier = Modifier
+            .padding(innerPadding)
+            .consumeWindowInsets (innerPadding),
         navController = navController,
         startDestination = Home
     ) {
@@ -77,15 +80,17 @@ fun AppNavHost(
         composable<Home> {
             HomeScreen(
                 onDetail = { navController.navigate(Detail) },
-                onAddMed = { navController.navigate(OnBoarding) }
+                onAddMed = { navController.navigate(AddMed) }
             )
         }
 
         composable<AddMed> {
+            val addMedViewModel = koinViewModel<AddMedicineViewModel>()
+            val state by addMedViewModel.state.collectAsStateWithLifecycle()
             AddMedScreen(
-                onBack = {
-                    // Handle back navigation
-                    navController.popBackStack()
+                state = state,
+                onEvent = {
+                    addMedViewModel.onEvent(it)
                 }
             )
         }
