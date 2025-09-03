@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +17,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -37,11 +42,7 @@ fun AddMedScreen(
     state: AddMedicineState,
     onEvent: (AddMedicineEvent) -> Unit
 ) {
-    val datePickerState = rememberAdaptiveDatePickerState(
-        initialUIKitDisplayMode = UIKitDisplayMode.Wheels
-    )
-
-
+    val focusManager = LocalFocusManager.current
     Scaffold(
         topBar = {
             Text(
@@ -87,6 +88,17 @@ fun AddMedScreen(
                     label = "Name*",
                     placeholder = "Name (e.g. Ibuprofen)",
                     value = state.name,
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Words,
+                        keyboardType = KeyboardType.Text,
+                        autoCorrectEnabled = true,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }
+                    ),
                     onValueChange = {
                         onEvent(AddMedicineEvent.onNameChanged(it))
                     }
@@ -109,6 +121,15 @@ fun AddMedScreen(
                     label = "Dose*",
                     placeholder = "Dose (e.g. 100mg)",
                     value = state.dosage,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = {
+                            focusManager.moveFocus(FocusDirection.Down)
+                        }
+                    ),
                     onValueChange = {
                         onEvent(AddMedicineEvent.onDoseChanged(it))
                     }
@@ -121,9 +142,8 @@ fun AddMedScreen(
                     placeholder = "Dose (e.g. 3)",
                     value = state.amount,
                     onValueChange = {
-                        onEvent(AddMedicineEvent.onAmountChanged(it))
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                        onEvent(AddMedicineEvent.onAmountChanged(it.toIntOrNull() ?: 1))
+                    }
                 )
 
                 Spacer(Modifier.height(16.dp))

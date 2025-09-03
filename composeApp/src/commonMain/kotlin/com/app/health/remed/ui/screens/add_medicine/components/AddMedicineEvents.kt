@@ -7,7 +7,7 @@ sealed class AddMedicineEvent {
     data class onNameChanged(val name: String) : AddMedicineEvent()
     data class onTypeChanged(val type: String) : AddMedicineEvent()
     data class onDoseChanged(val dose: String) : AddMedicineEvent()
-    data class onAmountChanged(val amount: String) : AddMedicineEvent()
+    data class onAmountChanged(val amount: Int) : AddMedicineEvent()
 
     data class TimePicker(val event: TimePickerEvent) : AddMedicineEvent()
 

@@ -28,6 +28,7 @@ import com.app.health.remed.ui.screens.add_medicine.AddMedScreen
 import com.app.health.remed.ui.screens.add_medicine.AddMedicineViewModel
 import com.app.health.remed.ui.screens.add_medicine.components.AddMedicineState
 import com.app.health.remed.ui.screens.home.HomeScreen
+import com.app.health.remed.ui.screens.home.HomeViewModel
 import com.app.health.remed.ui.screens.onboarding.OnBoardingScreen
 import com.app.health.remed.ui.screens.onboarding.OnBoardingViewModel
 import com.app.health.remed.ui.theme.AppTheme
@@ -78,7 +79,10 @@ fun AppNavHost(
         }
 
         composable<Home> {
+            val homeViewModel = koinViewModel<HomeViewModel>()
+            val list by homeViewModel.medicinesList.collectAsStateWithLifecycle()
             HomeScreen(
+                list = list,
                 onDetail = { navController.navigate(Detail) },
                 onAddMed = { navController.navigate(AddMed) }
             )
