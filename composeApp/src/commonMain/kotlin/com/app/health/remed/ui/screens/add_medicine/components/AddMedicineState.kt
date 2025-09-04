@@ -6,10 +6,14 @@ import com.app.health.remed.utils.getCurrentTime
 
 data class AddMedicineState(
     var name: String = "",
+    var nameError: String = "",
     var type: MedicineType = MedicineType.PILL,
     var dosage: String = "",
+    var dosageError: String = "",
     var amount: String = "",
+    var amountError: String = "",
     var displayedTime: String = "",
+    var timeError: String = "",
     var timePickerState: TimePickerState = TimePickerState(),
     var doseStatus: DoseStatus = DoseStatus.SCHEDULED
 )

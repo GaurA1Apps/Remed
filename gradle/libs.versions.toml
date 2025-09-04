@@ -18,6 +18,7 @@ androidx-splashscreen = "1.0.1"
 kotlinxDatetime = "0.7.1"
 kotlinxSerialization = "2.1.21"
 koin-bom="4.1.0"
+materialIconsCore = "1.7.3"
 navigationCompose = "2.9.0-rc01"
 room = "2.7.2"
 sqlite = "2.5.2"
@@ -44,6 +45,7 @@ koin-core = { module = "io.insert-koin:koin-core" }
 koin-compose = { module = "io.insert-koin:koin-compose" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel"}
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+material-icons-core = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "materialIconsCore" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }

@@ -1,10 +1,12 @@
 package com.app.health.remed.ui.screens.add_medicine.components.textfield
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenuItem
@@ -12,6 +14,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -22,6 +25,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.painterResource
+import remed.composeapp.generated.resources.Res
+import remed.composeapp.generated.resources.ic_app_icon
+import remed.composeapp.generated.resources.ic_error
 
 @Composable
 fun LabeledTextField(
@@ -29,6 +36,7 @@ fun LabeledTextField(
     placeholder: String,
     value: String,
     onValueChange: (String) -> Unit,
+    errorMessage: String? = null,
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default
@@ -53,6 +61,27 @@ fun LabeledTextField(
         keyboardActions = keyboardActions
     )
     Spacer(Modifier.height(8.dp))
+    if (errorMessage.isNullOrEmpty().not()) {
+        ErrorInfo(errorMessage)
+    }
+    Spacer(Modifier.height(8.dp))
+}
+
+@Composable
+fun ErrorInfo(errorMessage: String) {
+    Row(Modifier.fillMaxWidth()) {
+        Icon(
+            painter = painterResource(Res.drawable.ic_error),
+            tint = MaterialTheme.colorScheme.error,
+            contentDescription = null,
+            modifier = Modifier.size(16.dp).padding(end = 4.dp)
+        )
+        Text(
+            text = errorMessage,
+            color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.labelMedium
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,8 +111,9 @@ fun LabeledDropdown(
                     .menuAnchor()
                     .fillMaxWidth()
             )
-            ExposedDropdownMenu(expanded = expanded,
-                containerColor = MaterialTheme.colorScheme.surface,
+            ExposedDropdownMenu(
+                expanded = expanded,
+                containerColor = MaterialTheme.colorScheme.background,
                 onDismissRequest = { expanded = false }) {
                 options.forEach { option ->
                     DropdownMenuItem(
@@ -93,7 +123,10 @@ fun LabeledDropdown(
                             expanded = false
                         }
                     )
-                    HorizontalDivider(color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.fillMaxWidth().padding(8.dp))
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f),
+                        modifier = Modifier.fillMaxWidth().padding(8.dp)
+                    )
                 }
             }
         }

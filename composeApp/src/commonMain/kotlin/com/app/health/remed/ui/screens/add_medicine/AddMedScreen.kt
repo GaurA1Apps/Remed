@@ -1,6 +1,5 @@
 package com.app.health.remed.ui.screens.add_medicine
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,8 +7,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -17,23 +17,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.app.health.remed.ui.screens.add_medicine.components.AddMedicineEvent
 import com.app.health.remed.ui.screens.add_medicine.components.AddMedicineState
-import com.app.health.remed.ui.screens.add_medicine.components.textfield.LabeledDropdown
-import com.app.health.remed.ui.screens.add_medicine.components.textfield.LabeledTextField
 import com.app.health.remed.ui.screens.add_medicine.components.picker.TimePickerDialog
 import com.app.health.remed.ui.screens.add_medicine.components.picker.TimePickerField
+import com.app.health.remed.ui.screens.add_medicine.components.textfield.LabeledDropdown
+import com.app.health.remed.ui.screens.add_medicine.components.textfield.LabeledTextField
 import com.app.health.remed.ui.screens.home.components.PrimaryButton
 import com.app.health.remed.utils.MedicineType
-import com.mohamedrejeb.calf.ui.datepicker.UIKitDisplayMode
-import com.mohamedrejeb.calf.ui.datepicker.rememberAdaptiveDatePickerState
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,7 +37,6 @@ fun AddMedScreen(
     state: AddMedicineState,
     onEvent: (AddMedicineEvent) -> Unit
 ) {
-    val focusManager = LocalFocusManager.current
     Scaffold(
         topBar = {
             Text(
@@ -65,15 +59,15 @@ fun AddMedScreen(
     ) { innerPadding ->
 
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .padding(innerPadding),
             contentAlignment = Alignment.Center
         ) {
             Column(
                 modifier = Modifier
-                    .padding(innerPadding)
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp)
                     .fillMaxSize(),
-                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
@@ -88,16 +82,11 @@ fun AddMedScreen(
                     label = "Name*",
                     placeholder = "Name (e.g. Ibuprofen)",
                     value = state.name,
+                    errorMessage = state.nameError,
                     keyboardOptions = KeyboardOptions(
                         capitalization = KeyboardCapitalization.Words,
                         keyboardType = KeyboardType.Text,
-                        autoCorrectEnabled = true,
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = {
-                            focusManager.moveFocus(FocusDirection.Down)
-                        }
+                        autoCorrectEnabled = true
                     ),
                     onValueChange = {
                         onEvent(AddMedicineEvent.onNameChanged(it))
@@ -121,14 +110,9 @@ fun AddMedScreen(
                     label = "Dose*",
                     placeholder = "Dose (e.g. 100mg)",
                     value = state.dosage,
+                    errorMessage = state.dosageError,
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = {
-                            focusManager.moveFocus(FocusDirection.Down)
-                        }
+                        keyboardType = KeyboardType.Text
                     ),
                     onValueChange = {
                         onEvent(AddMedicineEvent.onDoseChanged(it))
@@ -141,6 +125,10 @@ fun AddMedScreen(
                     label = "Amount*",
                     placeholder = "Dose (e.g. 3)",
                     value = state.amount,
+                    errorMessage = state.amountError,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number
+                    ),
                     onValueChange = {
                         onEvent(AddMedicineEvent.onAmountChanged(it.toIntOrNull() ?: 1))
                     }
@@ -155,6 +143,7 @@ fun AddMedScreen(
                 TimePickerField(
                     value = state.displayedTime,
                     placeholder = "Select Time",
+                    errorMessage = state.timeError,
                     onEvent = {
                         onEvent(AddMedicineEvent.TimePicker(it))
                     },
