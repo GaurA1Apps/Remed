@@ -1,5 +1,6 @@
 package com.app.health.remed.di
 
+import com.app.health.remed.core.createAlarmeePlatformConfiguration
 import com.app.health.remed.data.db.getDatabaseBuilder
 import com.app.health.remed.prefs.createDataStore
 import org.koin.android.ext.koin.androidContext
@@ -10,4 +11,5 @@ actual val platformModule: Module
     get() = module {
         single { createDataStore(androidContext()) }
         single { getDatabaseBuilder(androidContext()) }
+        single { createAlarmeePlatformConfiguration() }
     }

@@ -49,8 +49,6 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
-            // Add your dependencies here
-
             // DataStore library
             api(libs.androidx.datastore)
             api(libs.androidx.datastore.preferences)
@@ -62,16 +60,19 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
-
             // For Adaptive UI components
             api(libs.calf.ui)
             implementation(libs.kotlinx.datetime)
 
+            // Room database
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
 
+            // Material icons
             implementation(libs.material.icons.core)
 
+            // For local notifications/Reminders
+            implementation(libs.alarmee)
 
         }
         commonTest.dependencies {

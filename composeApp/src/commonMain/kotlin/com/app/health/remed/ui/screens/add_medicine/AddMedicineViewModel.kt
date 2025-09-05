@@ -2,6 +2,7 @@ package com.app.health.remed.ui.screens.add_medicine
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.health.remed.core.ReminderManager
 import com.app.health.remed.data.MedicineRepository
 import com.app.health.remed.navigation.EventFlow
 import com.app.health.remed.navigation.NavigationEvent
@@ -18,7 +19,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AddMedicineViewModel(
-    private val repository: MedicineRepository
+    private val repository: MedicineRepository,
+    private val reminderManager: ReminderManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AddMedicineState())
@@ -67,6 +69,8 @@ class AddMedicineViewModel(
                 }
 
                 saveMedicinetoDB()
+
+                reminderManager.immediateReminder()
             }
 
             is AddMedicineEvent.onTypeChanged -> {

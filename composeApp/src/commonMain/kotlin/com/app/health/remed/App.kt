@@ -25,6 +25,7 @@ import com.app.health.remed.ui.screens.home.HomeViewModel
 import com.app.health.remed.ui.screens.onboarding.OnBoardingScreen
 import com.app.health.remed.ui.screens.onboarding.OnBoardingViewModel
 import com.app.health.remed.ui.theme.AppTheme
+import com.tweener.alarmee.rememberAlarmeeService
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinMultiplatformApplication
 import org.koin.compose.viewmodel.koinViewModel
@@ -56,7 +57,7 @@ fun AppNavHost(
             .padding(innerPadding)
             .consumeWindowInsets (innerPadding),
         navController = navController,
-        startDestination = Home
+        startDestination = OnBoarding
     ) {
         // Navigation destinations
         composable<OnBoarding> {
