@@ -73,6 +73,8 @@ kotlin {
 
             // For local notifications/Reminders
             implementation(libs.alarmee)
+            implementation(libs.permissions.notifications)
+            implementation(libs.permissions.compose)
 
         }
         commonTest.dependencies {

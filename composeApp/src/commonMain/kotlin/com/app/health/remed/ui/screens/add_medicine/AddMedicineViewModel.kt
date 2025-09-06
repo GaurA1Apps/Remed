@@ -40,7 +40,6 @@ class AddMedicineViewModel(
             }
 
             is AddMedicineEvent.onDoseChanged -> {
-
                 _state.update { it.copy(dosage = event.dose, dosageError = "") }
             }
 
@@ -70,7 +69,7 @@ class AddMedicineViewModel(
 
                 saveMedicinetoDB()
 
-                reminderManager.immediateReminder()
+                reminderManager.scheduleDailyReminder(medicineEntity = _state.value.toMedicineEntity())
             }
 
             is AddMedicineEvent.onTypeChanged -> {

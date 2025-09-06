@@ -21,6 +21,8 @@ kotlinxSerialization = "2.1.21"
 koin-bom="4.1.0"
 materialIconsCore = "1.7.3"
 navigationCompose = "2.9.0-rc01"
+permissionsCompose = "0.20.1"
+permissionsNotifications = "0.20.1"
 room = "2.7.2"
 sqlite = "2.5.2"
 ksp = "2.2.0-2.0.2"
@@ -52,6 +54,8 @@ navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-co
 androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+permissions-compose = { module = "dev.icerock.moko:permissions-compose", version.ref = "permissionsCompose" }
+permissions-notifications = { module = "dev.icerock.moko:permissions-notifications", version.ref = "permissionsNotifications" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

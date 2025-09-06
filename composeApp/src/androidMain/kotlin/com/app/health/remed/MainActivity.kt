@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.app.health.remed.prefs.DatastoreRepository
 import com.app.health.remed.prefs.createDataStore
+import com.app.health.remed.ui.screens.onboarding.OnBoardingFinal
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,4 +26,10 @@ class MainActivity : ComponentActivity() {
             App()
         }
     }
+}
+
+@Preview
+@Composable
+fun AppOnBoardingPreview() {
+
 }

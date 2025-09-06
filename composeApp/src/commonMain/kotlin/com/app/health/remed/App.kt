@@ -17,15 +17,18 @@ import com.app.health.remed.navigation.AddMed
 import com.app.health.remed.navigation.Detail
 import com.app.health.remed.navigation.Home
 import com.app.health.remed.navigation.NavigationEvent
-import com.app.health.remed.navigation.OnBoarding
+import com.app.health.remed.navigation.OnBoardingFinish
+import com.app.health.remed.navigation.OnBoardingGraph
+import com.app.health.remed.navigation.OnBoardingStart
+import com.app.health.remed.navigation.nav_graphs.onBoardingGraph
 import com.app.health.remed.ui.screens.add_medicine.AddMedScreen
 import com.app.health.remed.ui.screens.add_medicine.AddMedicineViewModel
 import com.app.health.remed.ui.screens.home.HomeScreen
 import com.app.health.remed.ui.screens.home.HomeViewModel
+import com.app.health.remed.ui.screens.onboarding.OnBoardingFinal
 import com.app.health.remed.ui.screens.onboarding.OnBoardingScreen
 import com.app.health.remed.ui.screens.onboarding.OnBoardingViewModel
 import com.app.health.remed.ui.theme.AppTheme
-import com.tweener.alarmee.rememberAlarmeeService
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinMultiplatformApplication
 import org.koin.compose.viewmodel.koinViewModel
@@ -55,18 +58,11 @@ fun AppNavHost(
     NavHost(
         modifier = Modifier
             .padding(innerPadding)
-            .consumeWindowInsets (innerPadding),
+            .consumeWindowInsets(innerPadding),
         navController = navController,
-        startDestination = OnBoarding
+        startDestination = OnBoardingGraph
     ) {
-        // Navigation destinations
-        composable<OnBoarding> {
-            val onBoardingViewModel = koinViewModel<OnBoardingViewModel>()
-            OnBoardingScreen {
-                onBoardingViewModel.onGetStartedClick()
-                navController.navigate(Home)
-            }
-        }
+        onBoardingGraph(navController)
 
         composable<Home> {
             val homeViewModel = koinViewModel<HomeViewModel>()
