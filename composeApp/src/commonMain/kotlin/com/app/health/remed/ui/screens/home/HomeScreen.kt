@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -19,14 +21,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.app.health.remed.data.entity.MedicineEntity
+import com.app.health.remed.domain.Medicine
 import com.app.health.remed.ui.screens.home.components.EmptyHomeScreen
+import com.app.health.remed.ui.screens.home.components.IntakeProgress
+import com.app.health.remed.ui.screens.home.components.ReminderListItem
 import com.app.health.remed.ui.topbar.AppTopBar
+import com.app.health.remed.utils.getCurrentDay
 
 @Composable
 fun HomeScreen(
-    list: List<MedicineEntity>,
+    list: List<Medicine>,
     onDetail: (Int) -> Unit,
     onAddMed: () -> Unit
 ) {
@@ -36,6 +43,7 @@ fun HomeScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
+                shape = CircleShape,
                 onClick = { onAddMed.invoke() },
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
@@ -63,36 +71,31 @@ fun HomeScreen(
             LazyColumn(
                 modifier = Modifier.padding(paddingValues)
             ) {
-                items(list) { medicine ->
-                    MedicineItem(medicine = medicine, onDetail = onDetail)
+
+                item {
+                    IntakeProgress(
+                        total = list.size,
+                        taken = 0,
+                        day = getCurrentDay(),
+                    )
+                }
+                item {
+                    Text(
+                        modifier = Modifier.padding(16.dp, 8.dp),
+                        text = "Doses",
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold)
+                    )
+                }
+                items(
+                    items = list,
+                    key = { it.id },
+                ) { medicine ->
+                    ReminderListItem(
+                        medicine = medicine,
+                    )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun MedicineItem(medicine: MedicineEntity, onDetail: (Int) -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clickable {
-                onDetail.invoke(medicine.id)
-            }
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(text = medicine.name, style = MaterialTheme.typography.titleMedium)
-                Text(text = "Dosage: ${medicine.dosage}", style = MaterialTheme.typography.bodySmall) // Assuming 'dosage' field
-            }
-            Text(text = "Amount: ${medicine.amount}", style = MaterialTheme.typography.bodyMedium) // Assuming 'amount' field
         }
     }
 }

@@ -37,6 +37,6 @@ val surfaceContainerLight = Color(0xFFECEEF4)
 val surfaceContainerHighLight = Color(0xFFE6E8EE)
 val surfaceContainerHighestLight = Color(0xFFE1E2E8)
 
-
+val yellow = Color(0xFFF7C744)
 
 

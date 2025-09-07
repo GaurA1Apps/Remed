@@ -17,9 +17,17 @@ fun getCurrentTime(): LocalTime {
     return now
 }
 
+fun getCurrentDay(): String {
+    return getCurrentDate().dayOfWeek.name.toCamelCase()
+}
+
 @OptIn(ExperimentalTime::class)
 fun getCurrentDate(): LocalDate {
     return Clock.System.now()
         .toLocalDateTime(TimeZone.currentSystemDefault())
         .date
+}
+
+fun String.toCamelCase(): String {
+    return lowercase().replaceFirstChar { it.titlecase() }
 }

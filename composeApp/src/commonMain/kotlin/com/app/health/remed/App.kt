@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.app.health.remed.di.createKoinConfiguration
+import com.app.health.remed.domain.toMedicine
 import com.app.health.remed.navigation.AddMed
 import com.app.health.remed.navigation.Detail
 import com.app.health.remed.navigation.Home
@@ -60,15 +61,15 @@ fun AppNavHost(
             .padding(innerPadding)
             .consumeWindowInsets(innerPadding),
         navController = navController,
-        startDestination = OnBoardingGraph
+        startDestination = Home
     ) {
         onBoardingGraph(navController)
 
         composable<Home> {
             val homeViewModel = koinViewModel<HomeViewModel>()
-            val list by homeViewModel.medicinesList.collectAsStateWithLifecycle()
+            val uiState by homeViewModel.uiState.collectAsStateWithLifecycle()
             HomeScreen(
-                list = list,
+                list = uiState.medicines,
                 onDetail = { navController.navigate(Detail) },
                 onAddMed = { navController.navigate(AddMed) }
             )
