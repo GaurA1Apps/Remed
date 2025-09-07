@@ -1,5 +1,6 @@
 package com.app.health.remed.utils
 
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -14,4 +15,11 @@ fun getCurrentTime(): LocalTime {
         .toLocalDateTime(TimeZone.currentSystemDefault())
         .time
     return now
+}
+
+@OptIn(ExperimentalTime::class)
+fun getCurrentDate(): LocalDate {
+    return Clock.System.now()
+        .toLocalDateTime(TimeZone.currentSystemDefault())
+        .date
 }

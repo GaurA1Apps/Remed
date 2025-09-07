@@ -1,6 +1,8 @@
 package com.app.health.remed.core
 
 import com.app.health.remed.data.entity.MedicineEntity
+import com.app.health.remed.utils.AppLogger
+import com.app.health.remed.utils.getCurrentDate
 import com.tweener.alarmee.AlarmeeService
 import com.tweener.alarmee.model.Alarmee
 import com.tweener.alarmee.model.AndroidNotificationConfiguration
@@ -19,15 +21,16 @@ class ReminderManager(
     fun scheduleDailyReminder(
         medicineEntity: MedicineEntity
     ) {
-        val scheduledDate = LocalDate(year = 2025, monthNumber = 9, dayOfMonth = 6)
+        val scheduledDate = getCurrentDate()
         val scheduledTime = LocalDateTime(
             date = scheduledDate, time = LocalTime(
                 hour = medicineEntity.hour,
                 minute = medicineEntity.minute
             )
         )
+        AppLogger.d(message = "Scheduled : ${scheduledTime.toString()}")
 
-        medicineService.immediate(
+        medicineService.schedule(
             alarmee = Alarmee(
                 uuid = "daily_medicine_reminder_${medicineEntity.id}",
                 notificationTitle = "💊 Time for your medicine",
