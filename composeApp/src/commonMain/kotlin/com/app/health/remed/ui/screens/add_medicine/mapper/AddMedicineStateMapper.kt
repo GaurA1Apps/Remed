@@ -11,8 +11,8 @@ fun AddMedicineState.toMedicineEntity(): MedicineEntity {
         dosage = dosage.trim(),
         amount = amount.toIntOrNull() ?: 0, // safer than direct toInt()
         type = selectedMedicineType ?: MedicineType.PILL,
-        hour = timePickerState.hour,
-        minute = timePickerState.minute,
+        hour = timeSlots.firstOrNull()?.hour ?: 0,
+        minute = timeSlots.firstOrNull()?.minute ?: 0,
         doseStatus = DoseStatus.SCHEDULED
     )
 }

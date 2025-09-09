@@ -1,16 +1,24 @@
 package com.app.health.remed.ui.screens.add_medicine
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,8 +34,8 @@ import com.app.health.remed.ui.screens.add_medicine.components.AddMedicineState
 import com.app.health.remed.ui.screens.add_medicine.components.grids.DurationGrid
 import com.app.health.remed.ui.screens.add_medicine.components.grids.FrequencyGrid
 import com.app.health.remed.ui.screens.add_medicine.components.grids.MedicineTypeGrid
+import com.app.health.remed.ui.screens.add_medicine.components.grids.TimeSlots
 import com.app.health.remed.ui.screens.add_medicine.components.picker.TimePickerDialog
-import com.app.health.remed.ui.screens.add_medicine.components.picker.TimePickerField
 import com.app.health.remed.ui.screens.add_medicine.components.textfield.AddScreenLabel
 import com.app.health.remed.ui.screens.add_medicine.components.textfield.LabeledTextField
 import com.app.health.remed.ui.screens.home.components.PrimaryButton
@@ -41,12 +49,25 @@ fun AddMedScreen(
 ) {
     Scaffold(
         topBar = {
-            Text(
-                "Add Medicine",
-                color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(16.dp)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    modifier = Modifier
+                        .clickable { onEvent(AddMedicineEvent.onBack) }
+                        .padding(end = 8.dp)
+                        .size(24.dp),
+                    tint = MaterialTheme.colorScheme.secondary,
+                    contentDescription = "Go Back"
+                )
+                Text(
+                    "Add Medicine",
+                    color = MaterialTheme.colorScheme.secondary,
+                    style = MaterialTheme.typography.headlineMedium
+                )
+            }
         },
         bottomBar = {
             PrimaryButton(
@@ -77,7 +98,7 @@ fun AddMedScreen(
                     textAlign = TextAlign.Start
                 )
 
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(12.dp))
 
                 LabeledTextField(
                     label = "Name*",
@@ -96,7 +117,7 @@ fun AddMedScreen(
 
                 Spacer(Modifier.height(8.dp))
 
-               /* LabeledDropdown(
+                /* LabeledDropdown(
                     label = "Type*",
                     options = MedicineType.entries.map { it.name },
                     selectedOption = state.type.name,
@@ -160,29 +181,27 @@ fun AddMedScreen(
 
                 Spacer(Modifier.height(8.dp))
 
-                Text("Reminders", style = MaterialTheme.typography.titleMedium)
+                AddScreenLabel(text = "Select Time Slots")
 
                 Spacer(Modifier.height(8.dp))
 
-                TimePickerField(
-                    value = state.displayedTime,
-                    placeholder = "Select Time",
-                    errorMessage = state.timeError,
-                    onEvent = {
-                        onEvent(AddMedicineEvent.TimePicker(it))
-                    },
+                TimeSlots(
+                    state = state,
+                    onEvent = onEvent
                 )
-            }
 
-            // Centered time picker in a Dialog
-            if (state.timePickerState.isVisible) {
-                TimePickerDialog(
-                    state = state.timePickerState,
-                    onEvent = {
-                        onEvent(AddMedicineEvent.TimePicker(it))
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                )
+                // Active TimePicker
+                state.activeSlotIndex?.let { index ->
+                    val slot = state.timeSlots[index]
+                    TimePickerDialog(
+                        index = index,
+                        state = slot,
+                        onEvent = { event ->
+                            onEvent(event)
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         }
     }

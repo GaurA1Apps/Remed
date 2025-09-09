@@ -10,7 +10,9 @@ sealed class AddMedicineEvent {
     data class onDoseChanged(val dose: String) : AddMedicineEvent()
     data class onAmountChanged(val amount: Int) : AddMedicineEvent()
 
-    data class TimePicker(val event: TimePickerEvent) : AddMedicineEvent()
+    data class OnTimeSlotClicked(val index: Int) : AddMedicineEvent()
+    data class OnTimePicked(val index: Int, val hour: Int, val minute: Int) : AddMedicineEvent()
+    object DismissTimePicker : AddMedicineEvent()
 
     data class OnFrequencySelected(val frequency: Frequency) : AddMedicineEvent()
 
@@ -21,11 +23,3 @@ sealed class AddMedicineEvent {
     object onSave : AddMedicineEvent()
     object onBack : AddMedicineEvent()
 }
-
-sealed class TimePickerEvent {
-    data class OnTimeChanged(val hour: Int, val minute: Int) : TimePickerEvent()
-    object OnOpen : TimePickerEvent()
-    object OnConfirmClick : TimePickerEvent()
-    object OnDismiss : TimePickerEvent()
-}
-

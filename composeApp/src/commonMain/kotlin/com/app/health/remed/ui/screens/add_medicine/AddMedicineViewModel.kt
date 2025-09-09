@@ -9,10 +9,8 @@ import com.app.health.remed.navigation.NavigationEvent
 import com.app.health.remed.ui.screens.add_medicine.components.AddMedicineEvent
 import com.app.health.remed.ui.screens.add_medicine.components.AddMedicineState
 import com.app.health.remed.ui.screens.add_medicine.components.MedValidator
-import com.app.health.remed.ui.screens.add_medicine.components.TimePickerEvent
+import com.app.health.remed.ui.screens.add_medicine.components.TimePickerState
 import com.app.health.remed.ui.screens.add_medicine.mapper.toMedicineEntity
-import com.app.health.remed.utils.MedicineType
-import com.app.health.remed.utils.formatTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -36,7 +34,9 @@ class AddMedicineViewModel(
             }
 
             AddMedicineEvent.onBack -> {
-                _state.update { it }
+                viewModelScope.launch {
+                    navigationEvents.send(NavigationEvent.GoBack)
+                }
             }
 
             is AddMedicineEvent.onDoseChanged -> {
@@ -83,14 +83,30 @@ class AddMedicineViewModel(
                     it.copy(selectedDuration = event.duration)
                 }
             }
+
             is AddMedicineEvent.OnFrequencySelected -> {
-                _state.update {
-                    it.copy(selectedFrequency = event.frequency)
+                val newSlots = List(event.frequency.slots) { TimePickerState() }
+                _state.update { it.copy(selectedFrequency = event.frequency, timeSlots = newSlots) }
+            }
+
+            is AddMedicineEvent.OnTimeSlotClicked -> {
+                _state.update { it.copy(activeSlotIndex = event.index) }
+            }
+
+            is AddMedicineEvent.OnTimePicked -> {
+                _state.update { state ->
+                    val updatedSlots = state.timeSlots.toMutableList()
+                    updatedSlots[event.index] = updatedSlots[event.index].copy(
+                        hour = event.hour,
+                        minute = event.minute,
+                        isConfirmed = true
+                    )
+                    state.copy(timeSlots = updatedSlots, activeSlotIndex = null)
                 }
             }
 
-            is AddMedicineEvent.TimePicker -> {
-                handleTimePickerEvent(event.event)
+            AddMedicineEvent.DismissTimePicker -> {
+                _state.update { it.copy(activeSlotIndex = null) }
             }
         }
     }
@@ -102,53 +118,50 @@ class AddMedicineViewModel(
             navigationEvents.send(NavigationEvent.GoBack)
         }
     }
+}
 
-    private fun handleTimePickerEvent(event: TimePickerEvent) {
-        when (event) {
-            is TimePickerEvent.OnTimeChanged -> {
-                _state.update { s ->
-                    s.copy(
-                        timePickerState = s.timePickerState.copy(
-                            hour = event.hour,
-                            minute = event.minute
-                        )
-                    )
-                }
-            }
 
-            TimePickerEvent.OnConfirmClick -> {
-                val hour = _state.value.timePickerState.hour
-                val minute = _state.value.timePickerState.minute
-                _state.update { parentState ->
-                    parentState.copy(
-                        displayedTime = formatTime(hour, minute),
-                        timePickerState = parentState.timePickerState.copy(
-                            isVisible = false
-                        ),
-                        timeError = ""
-                    )
-                }
-            }
-
-            TimePickerEvent.OnDismiss -> {
-                _state.update { parentState ->
-                    parentState.copy(
-                        timePickerState = parentState.timePickerState.copy(
-                            isVisible = false
-                        )
-                    )
-                }
-            }
-
-            TimePickerEvent.OnOpen -> {
-                _state.update { parentState ->
-                    parentState.copy(
-                        timePickerState = parentState.timePickerState.copy(
-                            isVisible = true
-                        )
-                    )
-                }
-            }
+    /*is TimePickerEvent.OnTimeChanged -> {
+        _state.update { s ->
+            s.copy(
+                timePickerState = s.timePickerState.copy(
+                    hour = event.hour,
+                    minute = event.minute
+                )
+            )
         }
     }
-}
+
+    TimePickerEvent.OnConfirmClick -> {
+        val hour = _state.value.timePickerState.hour
+        val minute = _state.value.timePickerState.minute
+        _state.update { parentState ->
+            parentState.copy(
+                displayedTime = formatTime(hour, minute),
+                timePickerState = parentState.timePickerState.copy(
+                    isVisible = false
+                ),
+                timeError = ""
+            )
+        }
+    }
+
+    TimePickerEvent.OnDismiss -> {
+        _state.update { parentState ->
+            parentState.copy(
+                timePickerState = parentState.timePickerState.copy(
+                    isVisible = false
+                )
+            )
+        }
+    }
+
+    TimePickerEvent.OnOpen -> {
+        _state.update { parentState ->
+            parentState.copy(
+                timePickerState = parentState.timePickerState.copy(
+                    isVisible = true
+                )
+            )
+        }
+    }*/

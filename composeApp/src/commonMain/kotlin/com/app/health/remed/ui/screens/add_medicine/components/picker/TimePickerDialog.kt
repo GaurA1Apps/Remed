@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePickerLayoutType
@@ -24,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.app.health.remed.ui.screens.add_medicine.components.TimePickerEvent
+import com.app.health.remed.ui.screens.add_medicine.components.AddMedicineEvent
 import com.app.health.remed.ui.screens.add_medicine.components.TimePickerState
 import com.mohamedrejeb.calf.ui.timepicker.AdaptiveTimePicker
 import com.mohamedrejeb.calf.ui.timepicker.rememberAdaptiveTimePickerState
@@ -33,8 +32,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickerDialog(
+    index: Int,
     state: TimePickerState,
-    onEvent: (TimePickerEvent) -> Unit,
+    onEvent: (AddMedicineEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     // Time Picker
@@ -44,15 +44,14 @@ fun TimePickerDialog(
         is24Hour = state.is24Hour
     )
 
-
-    // PickerState → ViewModel
+    /*// PickerState → ViewModel
     LaunchedEffect(pickerState.hour, pickerState.minute) {
-        onEvent(TimePickerEvent.OnTimeChanged(pickerState.hour, pickerState.minute))
-    }
+        onEvent(AddMedicineEvent.OnTimePicked(index, pickerState.hour, pickerState.minute))
+    }*/
 
 
     Dialog(
-        onDismissRequest = { onEvent(TimePickerEvent.OnDismiss) }
+        onDismissRequest = { onEvent(AddMedicineEvent.DismissTimePicker) }
     ) {
         Box(
             modifier = Modifier.fillMaxWidth()
@@ -93,12 +92,12 @@ fun TimePickerDialog(
                     horizontalArrangement = Arrangement.End
                 ) {
                     TextButton(
-                        onClick = { onEvent(TimePickerEvent.OnDismiss) }
+                        onClick = { onEvent(AddMedicineEvent.DismissTimePicker) }
                     ) {
                         Text("Cancel", color = MaterialTheme.colorScheme.error)
                     }
                     TextButton(
-                        onClick = { onEvent(TimePickerEvent.OnConfirmClick) }
+                        onClick = { onEvent(AddMedicineEvent.OnTimePicked(index, pickerState.hour, pickerState.minute)) }
                     ) {
                         Text("Confirm", color = MaterialTheme.colorScheme.primary)
                     }
@@ -112,6 +111,7 @@ fun TimePickerDialog(
 @Composable
 fun TimePickerDialogPreview() {
     TimePickerDialog(
+        index = 0,
         state = TimePickerState(),
         onEvent = {}
     )

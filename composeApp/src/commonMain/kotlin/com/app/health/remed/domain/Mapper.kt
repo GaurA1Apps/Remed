@@ -12,8 +12,8 @@ fun AddMedicineState.toMedicine(): Medicine {
         dosage = dosage.trim(),
         amount = amount.toIntOrNull() ?: 0,
         type = selectedMedicineType ?: MedicineType.PILL,
-        hour = timePickerState.hour,
-        minute = timePickerState.minute,
+        hour = timeSlots.first().hour,
+        minute = timeSlots.first().minute,
         doseStatus = DoseStatus.SCHEDULED
     )
 }

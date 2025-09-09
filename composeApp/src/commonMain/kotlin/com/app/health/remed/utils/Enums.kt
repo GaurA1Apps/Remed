@@ -28,16 +28,17 @@ enum class MedicineType(val label: String, val icon: DrawableResource) {
 enum class DoseStatus { SCHEDULED, TAKEN, SKIPPED }
 
 
-sealed class Frequency(val label: String) {
-    object Once : Frequency("Once daily")
-    object Twice : Frequency("Twice daily")
-    object Thrice : Frequency("Three times daily")
-    object FourTimes : Frequency("Four times daily")
+sealed class Frequency(val label: String, val slots: Int) {
+    object Once : Frequency("Once daily", 1)
+    object Twice : Frequency("Twice daily", 2)
+    object Thrice : Frequency("Three times daily", 3)
+    object FourTimes : Frequency("Four times daily", 4)
 
     companion object {
         val all = listOf(Once, Twice, Thrice, FourTimes)
     }
 }
+
 
 sealed class Duration(val label: String, val numberOfDays: Int) {
     object Three : Duration("3 days", 3)
