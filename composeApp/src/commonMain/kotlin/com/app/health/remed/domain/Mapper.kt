@@ -3,7 +3,7 @@ package com.app.health.remed.domain
 import com.app.health.remed.data.entity.MedicineEntity
 import com.app.health.remed.ui.screens.add_medicine.components.AddMedicineState
 import com.app.health.remed.utils.DoseStatus
-import kotlin.uuid.Uuid
+import com.app.health.remed.utils.MedicineType
 
 fun AddMedicineState.toMedicine(): Medicine {
     return Medicine(
@@ -11,7 +11,7 @@ fun AddMedicineState.toMedicine(): Medicine {
         name = name.trim(),
         dosage = dosage.trim(),
         amount = amount.toIntOrNull() ?: 0,
-        type = type,
+        type = selectedMedicineType ?: MedicineType.PILL,
         hour = timePickerState.hour,
         minute = timePickerState.minute,
         doseStatus = DoseStatus.SCHEDULED

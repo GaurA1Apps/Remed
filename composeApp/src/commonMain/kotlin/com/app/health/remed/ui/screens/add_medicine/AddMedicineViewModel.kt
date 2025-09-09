@@ -72,9 +72,20 @@ class AddMedicineViewModel(
                 reminderManager.scheduleDailyReminder(medicineEntity = _state.value.toMedicineEntity())
             }
 
-            is AddMedicineEvent.onTypeChanged -> {
+            is AddMedicineEvent.OnMedicineTypeSelected -> {
                 _state.update {
-                    it.copy(type = MedicineType.valueOf(event.type))
+                    it.copy(selectedMedicineType = event.medicineType)
+                }
+            }
+
+            is AddMedicineEvent.OnDurationSelected -> {
+                _state.update {
+                    it.copy(selectedDuration = event.duration)
+                }
+            }
+            is AddMedicineEvent.OnFrequencySelected -> {
+                _state.update {
+                    it.copy(selectedFrequency = event.frequency)
                 }
             }
 

@@ -13,9 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.app.health.remed.domain.sampleMedicine
-import com.app.health.remed.ui.screens.home.components.IntakeProgress
-import com.app.health.remed.ui.screens.home.components.ReminderListItem
+import com.app.health.remed.ui.screens.add_medicine.AddMedScreen
+import com.app.health.remed.ui.screens.add_medicine.components.AddMedicineState
 import com.app.health.remed.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -38,10 +37,9 @@ fun AppPreview() {
         Surface(
             modifier = Modifier.fillMaxWidth(),
         ) {
-            IntakeProgress(
-                total = 2,
-                taken = 0,
-                day = "Monday",
+            AddMedScreen(
+                state = AddMedicineState(),
+                onEvent = { }
             )
         }
     }

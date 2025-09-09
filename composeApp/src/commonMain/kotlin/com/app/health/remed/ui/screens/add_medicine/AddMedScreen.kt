@@ -23,12 +23,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.app.health.remed.ui.screens.add_medicine.components.AddMedicineEvent
 import com.app.health.remed.ui.screens.add_medicine.components.AddMedicineState
+import com.app.health.remed.ui.screens.add_medicine.components.grids.DurationGrid
+import com.app.health.remed.ui.screens.add_medicine.components.grids.FrequencyGrid
+import com.app.health.remed.ui.screens.add_medicine.components.grids.MedicineTypeGrid
 import com.app.health.remed.ui.screens.add_medicine.components.picker.TimePickerDialog
 import com.app.health.remed.ui.screens.add_medicine.components.picker.TimePickerField
-import com.app.health.remed.ui.screens.add_medicine.components.textfield.LabeledDropdown
+import com.app.health.remed.ui.screens.add_medicine.components.textfield.AddScreenLabel
 import com.app.health.remed.ui.screens.add_medicine.components.textfield.LabeledTextField
 import com.app.health.remed.ui.screens.home.components.PrimaryButton
-import com.app.health.remed.utils.MedicineType
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,8 +61,7 @@ fun AddMedScreen(
     ) { innerPadding ->
 
         Box(
-            modifier = Modifier.fillMaxSize()
-                .padding(innerPadding),
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -80,7 +81,7 @@ fun AddMedScreen(
 
                 LabeledTextField(
                     label = "Name*",
-                    placeholder = "Name (e.g. Ibuprofen)",
+                    placeholder = "Medicine Name(e.g. Ibuprofen)",
                     value = state.name,
                     errorMessage = state.nameError,
                     keyboardOptions = KeyboardOptions(
@@ -93,9 +94,9 @@ fun AddMedScreen(
                     }
                 )
 
-                Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(8.dp))
 
-                LabeledDropdown(
+               /* LabeledDropdown(
                     label = "Type*",
                     options = MedicineType.entries.map { it.name },
                     selectedOption = state.type.name,
@@ -105,10 +106,12 @@ fun AddMedScreen(
                 )
 
                 Spacer(Modifier.height(18.dp))
+*/
+
 
                 LabeledTextField(
                     label = "Dose*",
-                    placeholder = "Dose (e.g. 100mg)",
+                    placeholder = "Dosage (e.g. 100mg)",
                     value = state.dosage,
                     errorMessage = state.dosageError,
                     keyboardOptions = KeyboardOptions(
@@ -119,11 +122,11 @@ fun AddMedScreen(
                     }
                 )
 
-                Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(8.dp))
 
                 LabeledTextField(
                     label = "Amount*",
-                    placeholder = "Dose (e.g. 3)",
+                    placeholder = "Amount (e.g. 2)",
                     value = state.amount,
                     errorMessage = state.amountError,
                     keyboardOptions = KeyboardOptions(
@@ -134,7 +137,28 @@ fun AddMedScreen(
                     }
                 )
 
-                Spacer(Modifier.height(16.dp))
+                AddScreenLabel(text = "Medication Type")
+
+                MedicineTypeGrid(
+                    state = state,
+                    onEvent = onEvent
+                )
+
+                AddScreenLabel(text = "How Often?")
+
+                FrequencyGrid(
+                    state = state,
+                    onEvent = onEvent
+                )
+
+                AddScreenLabel(text = "For how Long?")
+
+                DurationGrid(
+                    state = state,
+                    onEvent = onEvent
+                )
+
+                Spacer(Modifier.height(8.dp))
 
                 Text("Reminders", style = MaterialTheme.typography.titleMedium)
 
