@@ -18,7 +18,7 @@ class ReminderManager(
 ) {
     private val medicineService get() = alarmeeService.local
 
-    fun scheduleDailyReminder(
+   /* fun scheduleDailyReminder(
         medicineEntity: MedicineEntity
     ) {
         val scheduledDate = getCurrentDate()
@@ -47,7 +47,7 @@ class ReminderManager(
                 ),
             )
         )
-    }
+    }*/
 
     fun immediateReminder() {
         medicineService.immediate(

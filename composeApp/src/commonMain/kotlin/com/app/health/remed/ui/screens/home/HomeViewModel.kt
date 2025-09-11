@@ -3,9 +3,6 @@ package com.app.health.remed.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.health.remed.data.MedicineRepository
-import com.app.health.remed.data.entity.MedicineEntity
-import com.app.health.remed.domain.toMedicine
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -17,10 +14,10 @@ class HomeViewModel(
     private val repository: MedicineRepository
 ) : ViewModel() {
 
-    val uiState: StateFlow<HomeUiState> = repository.getAllMedicines()
-        .map { entities ->
+    val uiState: StateFlow<HomeUiState> = repository.getTodayDoses()
+        .map { doseWithMedicine ->
             HomeUiState(
-                medicines = entities.map { it.toMedicine() },
+                doseWithMedicines = doseWithMedicine,
                 isLoading = false,
                 errorMessage = null
             )

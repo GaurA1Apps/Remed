@@ -2,23 +2,21 @@ package com.app.health.remed.ui.screens.add_medicine
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.health.remed.core.ReminderManager
-import com.app.health.remed.data.MedicineRepository
+import com.app.health.remed.domain.usecases.AddMedicineUseCase
 import com.app.health.remed.navigation.EventFlow
 import com.app.health.remed.navigation.NavigationEvent
+import com.app.health.remed.ui.mappers.toMedicine
 import com.app.health.remed.ui.screens.add_medicine.components.AddMedicineEvent
 import com.app.health.remed.ui.screens.add_medicine.components.AddMedicineState
 import com.app.health.remed.ui.screens.add_medicine.components.MedValidator
 import com.app.health.remed.ui.screens.add_medicine.components.TimePickerState
-import com.app.health.remed.ui.screens.add_medicine.mapper.toMedicineEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AddMedicineViewModel(
-    private val repository: MedicineRepository,
-    private val reminderManager: ReminderManager
+    private val addMedicineUseCase: AddMedicineUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AddMedicineState())
@@ -55,7 +53,6 @@ class AddMedicineViewModel(
                         nameError = result.nameError.orEmpty(),
                         dosageError = result.dosageError.orEmpty(),
                         amountError = result.amountError.orEmpty(),
-                        timeError = result.timeError.orEmpty()
                     )
                     return
                 } else {
@@ -63,13 +60,12 @@ class AddMedicineViewModel(
                         nameError = "",
                         dosageError = "",
                         amountError = "",
-                        timeError = ""
                     )
                 }
-
-                saveMedicinetoDB()
-
-                reminderManager.scheduleDailyReminder(medicineEntity = _state.value.toMedicineEntity())
+                viewModelScope.launch {
+                    addMedicineUseCase.invoke(state.value.toMedicine())
+                    navigationEvents.send(NavigationEvent.GoBack)
+                }
             }
 
             is AddMedicineEvent.OnMedicineTypeSelected -> {
@@ -108,14 +104,6 @@ class AddMedicineViewModel(
             AddMedicineEvent.DismissTimePicker -> {
                 _state.update { it.copy(activeSlotIndex = null) }
             }
-        }
-    }
-
-    private fun saveMedicinetoDB() {
-        val medicine = _state.value.toMedicineEntity()
-        viewModelScope.launch {
-            repository.insertMedicine(medicine)
-            navigationEvents.send(NavigationEvent.GoBack)
         }
     }
 }

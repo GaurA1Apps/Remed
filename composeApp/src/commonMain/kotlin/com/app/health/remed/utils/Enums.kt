@@ -36,6 +36,9 @@ sealed class Frequency(val label: String, val slots: Int) {
 
     companion object {
         val all = listOf(Once, Twice, Thrice, FourTimes)
+        fun fromString(label: String): Frequency {
+            return all.find { it.label == label } ?: Once
+        }
     }
 }
 

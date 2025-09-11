@@ -117,19 +117,6 @@ fun AddMedScreen(
 
                 Spacer(Modifier.height(8.dp))
 
-                /* LabeledDropdown(
-                    label = "Type*",
-                    options = MedicineType.entries.map { it.name },
-                    selectedOption = state.type.name,
-                    onOptionSelected = {
-                        onEvent(AddMedicineEvent.onTypeChanged(it))
-                    }
-                )
-
-                Spacer(Modifier.height(18.dp))
-*/
-
-
                 LabeledTextField(
                     label = "Dose*",
                     placeholder = "Dosage (e.g. 100mg)",

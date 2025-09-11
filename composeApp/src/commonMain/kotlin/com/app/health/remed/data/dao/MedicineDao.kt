@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.Flow
 interface MedicineDao {
 
     @Upsert
-    suspend fun insertMedicine(medicine: MedicineEntity)
+    suspend fun insertMedicine(medicine: MedicineEntity) : Long
 
-    @Query("SELECT * FROM medicines ORDER BY hour, minute")
-    fun getAllMedicines(): Flow<List<MedicineEntity>>
+    @Query("SELECT * FROM medicines")
+    suspend fun getAllMedicinesOnce(): List<MedicineEntity>
 
     @Query("SELECT * FROM medicines WHERE id = :id")
     suspend fun getMedicineById(id: Int): MedicineEntity

@@ -27,7 +27,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "Compose"
             isStatic = true
             export("om.mohamedrejeb.calf:calf-ui:0.8.0")
         }
