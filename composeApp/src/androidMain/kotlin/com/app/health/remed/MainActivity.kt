@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.app.health.remed.ui.screens.add_medicine.AddMedScreen
 import com.app.health.remed.ui.screens.add_medicine.components.AddMedicineState
+import com.app.health.remed.ui.screens.splash.SplashScreen
 import com.app.health.remed.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -37,10 +38,9 @@ fun AppPreview() {
         Surface(
             modifier = Modifier.fillMaxWidth(),
         ) {
-            AddMedScreen(
-                state = AddMedicineState(),
-                onEvent = { }
-            )
+            SplashScreen {
+                
+            }
         }
     }
 }

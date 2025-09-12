@@ -74,7 +74,7 @@ fun HomeScreen(
                     Text(
                         modifier = Modifier.padding(16.dp, 8.dp),
                         text = "Doses",
-                        color = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.onBackground,
                         style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.ExtraBold)
                     )
                 }

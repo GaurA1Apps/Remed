@@ -15,7 +15,7 @@ import kotlin.time.Instant
 
 fun DoseWithMedicine.toDomain(): List<DoseWithMedicineDomain> {
     val medicine = medicineEntity.toDomain()
-    val doses = doseEntity.map { it.toDomain() }
+    val doses = doseEntity.sortedBy { it.time }.map { it.toDomain() }
     return doses.map { dose ->
         DoseWithMedicineDomain(
             medicine = medicine,
